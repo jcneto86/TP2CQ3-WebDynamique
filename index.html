@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeeList</title>
+    <link rel="icon" href="img/bee.ico"/>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login_form.css">
+</head>
+
+<body>
+<div class="nav">
+    <div class="logo float_left">
+    </div>
+    <div class="menu float_right">
+        <div class="menu_item"><a href="#">Accueil</a></div>
+        <div class="menu_item"><a href="#">Déconnexio</a></div>
+    </div>
+    <button onclick="isNone(/'idMenuMobile/')" class="fas fa-bars float_right"></button>
+    <div id="idMenuMobile" class="menu_mobile ">
+        <div class="menu_item float_left"><a href="#" onclick="isNone(idMenuMobile)">Accueil</a></div>
+        <div class="menu_item float_right"><a href="#" onclick="isNone(idMenuMobile)">Déconnexio</a></div>
+    </div>
+</div>
+<div id="id01" class="login_container">
+    <form>
+        <div>
+            <label id="uname-label" for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+            <label id="psw-label" for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+            <button type="submit">Login</button>
+            <label><input type="checkbox" checked="checked" name="remember"> Remember me</label>
+        </div>
+        <div>
+            <button type="button" class="cancelbtn">Cancel</button>
+            <span class="psw">Forgot <a href="#">password?</a></span>
+        </div>
+    </form>
+</div>
+<div class="hero_image">
+    <div class="hero_text">
+        <h1>BeeList</h1>
+        <p>Une liste de choses à faire, pratique et gratuite !</p>
+        <button onclick="document.getElementById('id01').style.display='block'">Entrer</button>
+    </div>
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+
+</html>
