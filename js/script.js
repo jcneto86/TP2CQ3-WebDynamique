@@ -1,53 +1,47 @@
-var cards = [
-    id: 'card0' + histoqueIdCards,
-    titre: "Vous tittre",
-    contenu: "Vous tâches",
-    type: "urgence_basse"
-];
 var histoqueIdCards = 1;
+var cards;
+cards = [
 
+    {
+        id: "card01",
+        titre: "titre card01",
+        contenu: ["contenu"],
+        type: "urgence_basse"
+    }
+
+];
+console.log(cards);
 
 
 function localStorageSave() {
 
     try {
-        chargerCards();
-    } catch(e) {
+        porterCards();
+    } catch (e) {
         saveToLocalStorage();
     }
-
-    // if (localStorageExist('cardsTaches')) {
-    //     // oui
-    //     chargerCards();
-    //     montrerCards();
-    // } else {
-    //     // non
-    //     saveToLocalStorage();
-    // }
-    montrerCards();
+    chargerCards();
 }
-
-localStorageSave();
-
 
 function saveToLocalStorage() {
     localStorage.setItem('cardsTaches', JSON.stringify(cards));
     localStorage.setItem('histoqueIdCards', histoqueIdCards);
 }
 
-function chargerCards() {
+function porterCards() {
     cards = JSON.parse(localStorage.getItem('cardsTaches'));
     histoqueIdCards += +localStorage.getItem('histoqueIdCards');
 }
 
 function isNone(id) {
-    var x = document.getElementById(id);
-    if (x.style.display === 'none') {
-        x.style.display = 'block';
+    let element = document.getElementById(id);
+    if (element.style.display === 'none') {
+        element.style.display = 'block';
     } else {
-        x.style.display = 'none';
+        element.style.display = 'none';
     }
 }
+
 
 // {
 //     id: "1",
@@ -77,66 +71,63 @@ function isNone(id) {
 function addCard() {
     cards.push(
         {
-            id: 'card0' + histoqueIdCards,
+            id: "card0" + histoqueIdCards,
             titre: "titre",
-            contenu: "contenu",
+            contenu: ["contenu"],
             type: "urgence_basse"
         }
     );
     histoqueIdCards++;
     localStorageSave();
     montrerCardAdd();
-}
-
-function addArrayCards(id) {
-    cards.push(
-        {
-            id: 'card0' + histoqueIdCards,
-            titre: document.getElementById(id).msGetInputContext('h2'),
-            contenu: document.getElementById(id).msGetInputContext('p'),
-            type: "urgence_basse"
-        }
-    )
-}
-
-function effacerCard(id) {
-    let card = document.getElementById(id);
-    card.remove();
-    for (var i = 0; i < cards.length; i++)
-        if (cards[i].id === id) {
-            cards.splice(i, 1);
-        }
-    localStorageSave();
     console.log(cards)
 }
 
 
-function montrerCards() {
+function effacerCard(id) {
+    let card = document.getElementById(id);
+    card.remove();
+    for (let i = 0; i < cards.length; i++)
+        if (cards[i].id === id) {
+            cards.splice(i, 1);
+        }
+    localStorageSave();
+    console.log(cards);
+}
+
+function chargerCards() {
+    let container = document.getElementById('containerCards');
     for (let i = 0; i < cards.length; i++) {
+        console.log(cards[i].contenu.length);
+        alert(cards[i].contenu.length);
         let divCard = document.createElement('div');
         let titre = document.createElement('h2');
-        let contenuContent = document.createElement('p');
         let divTools = document.createElement('div');
         let buttonEdit = document.createElement('button');
         let buttonDelete = document.createElement('button');
+        let list = document.createElement('ul');
+        for (let j = 0; j < cards[i].contenu.length; j++) {
+            let li = document.createElement('li');
+            let textLi = document.createTextNode(cards[i].contenu[j]);
+            li.appendChild(textLi);
+            list.appendChild(li);
+        }
         buttonEdit.className = 'edit float_left';
         buttonDelete.className = 'delete float_right';
         buttonDelete.setAttribute('onclick', 'effacerCard(\'' + cards[i].id + '\')');
         titre.setAttribute('contenteditable', 'true');
-        contenuContent.setAttribute('contenteditable', 'true');
-        contenuContent.setAttribute('onfocusout', 'myFunction()');
+        list.setAttribute('contenteditable', 'true');
+        list.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[i].id + '\')');
         divCard.className = 'card ' + cards[i].type;
         divCard.id = cards[i].id;
         let ramplirTitle = document.createTextNode(cards[i].titre);
-        let ramplirContenu = document.createTextNode(cards[i].titre);
         titre.appendChild(ramplirTitle);
-        contenuContent.appendChild(ramplirContenu);
         divTools.appendChild(buttonDelete);
         divTools.appendChild(buttonEdit);
         divCard.appendChild(titre);
-        divCard.appendChild(contenuContent);
+        divCard.appendChild(list);
         divCard.appendChild(divTools);
-        document.getElementById('containerCards').appendChild(divCard);
+        container.appendChild(divCard);
     }
 }
 
@@ -151,44 +142,50 @@ function montrerCards() {
 // </div>
 
 function montrerCardAdd() {
+    let container = document.getElementById('containerCards');
     let index;
     if (cards.length === 0) {
         index = 0;
     } else {
         index = cards.length - 1;
     }
-
+    console.log('Index : ' + index);
     let divCard = document.createElement('div');
     let titre = document.createElement('h2');
-    let contenuContent = document.createElement('p');
     let divTools = document.createElement('div');
     let buttonEdit = document.createElement('button');
     let buttonDelete = document.createElement('button');
-    divCard.className = 'card ' + cards[cards[index]].type;
+    let list = document.createElement('ul');
+    for (let j = 0; j < cards[index].contenu.length; j++) {
+        let li = document.createElement('li');
+        let textLi = document.createTextNode(cards[index].contenu[j]);
+        li.appendChild(textLi);
+        list.appendChild(li);
+    }
     buttonEdit.className = 'edit float_left';
     buttonDelete.className = 'delete float_right';
     buttonDelete.setAttribute('onclick', 'effacerCard(\'' + cards[index].id + '\')');
     titre.setAttribute('contenteditable', 'true');
-    contenuContent.setAttribute('contenteditable', 'true');
-    contenuContent.setAttribute('onfocusout', 'myFunction()');
-    divCard.id = cards[cards.length - 1].id;
+    list.setAttribute('contenteditable', 'true');
+    list.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[index].id + '\')');
+    divCard.className = 'card ' + cards[index].type;
+    divCard.id = cards[index].id;
     let ramplirTitle = document.createTextNode(cards[index].titre);
-    let ramplirContenu = document.createTextNode(cards[index].contenu);
     titre.appendChild(ramplirTitle);
-    contenuContent.appendChild(ramplirContenu);
     divTools.appendChild(buttonDelete);
     divTools.appendChild(buttonEdit);
     divCard.appendChild(titre);
-    divCard.appendChild(contenuContent);
+    divCard.appendChild(list);
     divCard.appendChild(divTools);
-    document.getElementById('containerCards').appendChild(divCard);
+    container.appendChild(divCard);
 }
 
-montrerCards();
 
-
-
-
+function starON() {
+    localStorageSave();
+    chargerCards();
+    console.log(cards[0].contenu.length);
+}
 
 
 

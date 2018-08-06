@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body>
+<body onload="starON()">
 <div class="nav">
     <div class="logo float_left">
     </div>
@@ -19,7 +19,7 @@
         <div class="menu_item"><a href="#">Accueil</a></div>
         <div class="menu_item"><a href="#">Déconnexio</a></div>
     </div>
-    <button onclick="isNone(\'idMenuMobile\')" class="fas fa-bars float_right"></button>
+    <button onclick="isNone('idMenuMobile')" class="fas fa-bars float_right"></button>
     <div id="idMenuMobile" class="menu_mobile">
         <div class="menu_item float_left"><a href="#" onclick="isNone(idMenuMobile)">Accueil</a></div>
         <div class="menu_item float_right"><a href="#" onclick="isNone(idMenuMobile)">Déconnexio</a></div>
@@ -30,6 +30,9 @@
     <h1>Title</h1>
 </div>
 <div id="containerCards" class="container">
+
+
+
 </div>
 <button class="fas fa-plus-square button_float" onclick="addCard()">
 
