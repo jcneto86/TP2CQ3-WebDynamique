@@ -3,24 +3,21 @@ var cards;
 cards = [
 
     {
-        id: "card01",
-        titre: "titre card01",
-        contenu: ["contenu"],
-        type: "urgence_basse"
+        "id": "card01",
+        "titre": "titre",
+        "contenu": ["contenu"],
+        "type": "urgence_basse"
     }
 
 ];
-console.log(cards);
 
 
 function localStorageSave() {
-
-    try {
-        porterCards();
-    } catch (e) {
+    if (localStorage.getItem('cardsTaches') == null) {
         saveToLocalStorage();
+    } else {
+        porterVariables();
     }
-    chargerCards();
 }
 
 function saveToLocalStorage() {
@@ -28,9 +25,9 @@ function saveToLocalStorage() {
     localStorage.setItem('histoqueIdCards', histoqueIdCards);
 }
 
-function porterCards() {
+function porterVariables() {
     cards = JSON.parse(localStorage.getItem('cardsTaches'));
-    histoqueIdCards += +localStorage.getItem('histoqueIdCards');
+    histoqueIdCards = +localStorage.getItem('histoqueIdCards');
 }
 
 function isNone(id) {
@@ -71,16 +68,15 @@ function isNone(id) {
 function addCard() {
     cards.push(
         {
-            id: "card0" + histoqueIdCards,
-            titre: "titre",
-            contenu: ["contenu"],
-            type: "urgence_basse"
+            "id": "card0" + histoqueIdCards,
+            "titre": "titre",
+            "contenu": ["contenu"],
+            "type": "urgence_basse"
         }
     );
     histoqueIdCards++;
     localStorageSave();
     montrerCardAdd();
-    console.log(cards)
 }
 
 
@@ -99,7 +95,6 @@ function chargerCards() {
     let container = document.getElementById('containerCards');
     for (let i = 0; i < cards.length; i++) {
         console.log(cards[i].contenu.length);
-        alert(cards[i].contenu.length);
         let divCard = document.createElement('div');
         let titre = document.createElement('h2');
         let divTools = document.createElement('div');
@@ -143,7 +138,9 @@ function chargerCards() {
 
 function montrerCardAdd() {
     let container = document.getElementById('containerCards');
-    let index;
+    let index = 2;
+    console.log('Index : ' + index);
+    console.log('cards Index : ' + cards.length);
     if (cards.length === 0) {
         index = 0;
     } else {
@@ -184,9 +181,7 @@ function montrerCardAdd() {
 function starON() {
     localStorageSave();
     chargerCards();
-    console.log(cards[0].contenu.length);
 }
-
 
 
 
