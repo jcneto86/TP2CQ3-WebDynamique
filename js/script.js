@@ -1,15 +1,11 @@
 var histoqueIdCards = 1;
 var cards;
-cards = [
-
-    {
+cards = [{
         "id": "card01",
         "titre": "titre",
         "contenu": ["contenu"],
         "type": "urgence_basse"
-    }
-
-];
+}];
 
 
 function localStorageSave() {
@@ -56,7 +52,7 @@ function isNone(id) {
 //     id: "3",
 //         titre: "titre id03",
 //     contenu: "contenu id03",
-//     type: "urgence_moyenne"
+ //     type: "urgence_moyenne"
 // },
 // {
 //     id: "4",
@@ -65,6 +61,9 @@ function isNone(id) {
 //     type: "urgence_moyenne"
 // }
 
+/**
+ *
+ */
 function addCard() {
     cards.push(
         {
@@ -75,8 +74,9 @@ function addCard() {
         }
     );
     histoqueIdCards++;
-    localStorageSave();
+    saveToLocalStorage();
     montrerCardAdd();
+    log();
 }
 
 
@@ -87,14 +87,68 @@ function effacerCard(id) {
         if (cards[i].id === id) {
             cards.splice(i, 1);
         }
-    localStorageSave();
-    console.log(cards);
+    saveToLocalStorage();
+    log();
+}
+
+function changerUrgence(id) {
+    let card = document.getElementById(id);
+    if (card.className === 'card urgence_basse') {
+        document.getElementById(id).className = 'card urgence_moyenne';
+        changerType(id, 'urgence_moyenne');
+    }
+    else if (card.className === 'card urgence_moyenne') {
+        document.getElementById(id).className = 'card urgence_haute';
+        changerType(id, 'urgence_haute');
+    } else {
+        document.getElementById(id).className = 'card urgence_basse';
+        changerType(id, 'urgence_basse');
+    }
+
+
+}
+
+function changerType(id, type) {
+    for (let i = 0; i < cards.length; i++)
+        if (cards[i].id === id) {
+            cards[i].type = type;
+        }
+    saveToLocalStorage();
+}
+
+function updateArrayCards(id) {
+
+    var list = document.getElementById(id).childNodes;
+    var theArray = [];
+    for(var i=0;i < list.length; i++) {
+        var arrValue = list[i].innerHTML;
+        alert(arrValue);
+        theArray.push(arrValue);
+    }
+
+    // let card = document.getElementById(id);
+    // let titre = card.getElementsByTagName('h2').childNodes[0];
+    // let contenu = card.getElementsByTagName('li').childNodes;
+    // console.log(titre);
+    // console.log(contenu);
+    // for (let i = 0; i < cards.length; i++) {
+    //     if (cards[i].id === id) {
+    //         cards[i].titre = titre;
+    //         cards[i].contenu = [];
+    //         for (let j = 0; j < contenu.length; j++) {
+    //             cards[i].contenu.push(contenu[j].innerHTML);
+    //         }
+    //     }
+    // }
+
+
+    saveToLocalStorage();
 }
 
 function chargerCards() {
     let container = document.getElementById('containerCards');
     for (let i = 0; i < cards.length; i++) {
-        console.log(cards[i].contenu.length);
+        log();
         let divCard = document.createElement('div');
         let titre = document.createElement('h2');
         let divTools = document.createElement('div');
@@ -107,12 +161,14 @@ function chargerCards() {
             li.appendChild(textLi);
             list.appendChild(li);
         }
-        buttonEdit.className = 'edit float_left';
-        buttonDelete.className = 'delete float_right';
+        buttonEdit.className = 'edit float_left fas fa-palette';
+        buttonEdit.setAttribute('onclick', 'changerUrgence(\'' + cards[i].id + '\')');
+        buttonDelete.className = 'delete float_right fas fa-trash-alt';
         buttonDelete.setAttribute('onclick', 'effacerCard(\'' + cards[i].id + '\')');
         titre.setAttribute('contenteditable', 'true');
         list.setAttribute('contenteditable', 'true');
         list.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[i].id + '\')');
+        divTools.className = 'tools_cards';
         divCard.className = 'card ' + cards[i].type;
         divCard.id = cards[i].id;
         let ramplirTitle = document.createTextNode(cards[i].titre);
@@ -139,8 +195,7 @@ function chargerCards() {
 function montrerCardAdd() {
     let container = document.getElementById('containerCards');
     let index = 2;
-    console.log('Index : ' + index);
-    console.log('cards Index : ' + cards.length);
+    log();
     if (cards.length === 0) {
         index = 0;
     } else {
@@ -159,12 +214,15 @@ function montrerCardAdd() {
         li.appendChild(textLi);
         list.appendChild(li);
     }
-    buttonEdit.className = 'edit float_left';
-    buttonDelete.className = 'delete float_right';
+    buttonEdit.className = 'edit float_left fas fa-palette';
+    buttonEdit.setAttribute('onclick', 'changerUrgence(\'' + cards[index].id + '\')');
+    buttonDelete.className = 'delete float_right fas fa-trash-alt';
     buttonDelete.setAttribute('onclick', 'effacerCard(\'' + cards[index].id + '\')');
     titre.setAttribute('contenteditable', 'true');
+    titre.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[index].id + '\')');
     list.setAttribute('contenteditable', 'true');
     list.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[index].id + '\')');
+    divTools.className = 'tools_cards';
     divCard.className = 'card ' + cards[index].type;
     divCard.id = cards[index].id;
     let ramplirTitle = document.createTextNode(cards[index].titre);
@@ -175,6 +233,14 @@ function montrerCardAdd() {
     divCard.appendChild(list);
     divCard.appendChild(divTools);
     container.appendChild(divCard);
+}
+
+function log() {
+
+    console.log('Log : ');
+    console.log('\nCards = ' + cards);
+    console.log('\nCards length = ' + cards.length);
+    console.log('\nHistoqueIdCards = ' + histoqueIdCards);
 }
 
 
