@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
+@import url('https://fonts.googleapis.com/css?family=Rokkitt');
+@import url('https://fonts.googleapis.com/css?family=Prata');
+
 :root {
     --primary: #ffca28;
     --primary-variant1: #ffb300;
@@ -13,12 +16,14 @@
 }
 
 h1,
-h2,
 h3,
 h4,
 h5,
 h6 {
     font-family: 'Pacifico', cursive;
+}
+h2 {
+    font-family: 'Prata', serif;
 }
 
 body {

@@ -1,31 +1,55 @@
-var histoqueIdCards = 1;
-var cards;
+// variable qui garde le nombre de cartes créées
+let histoqueIdCards = 1;
+// tableau de la carte
+let cards;
 cards = [{
-        "id": "card01",
-        "titre": "titre",
-        "contenu": ["contenu"],
+        "id": "card" + histoqueIdCards,
+        "titre": "Cliquez ici pour éditer le titre",
+        "contenu": ["Cliquez ici pour éditer le contenu"],
         "type": "urgence_basse"
 }];
 
-
+/** function localStorageSave()
+ *
+ * Fonction qui vérifie si les données ont déjà été enregistrées.
+ * Si oui, les données sont chargées, sinon les données initiales sont enregistrées.
+ *
+ */
 function localStorageSave() {
     if (localStorage.getItem('cardsTaches') == null) {
         saveToLocalStorage();
     } else {
-        porterVariables();
+        importerVariables();
     }
 }
 
+/** function saveToLocalStorage()
+ *
+ * Fonction qui enregistre les variables cards et histoqueIdCards dans le localStorage.
+ *
+ */
 function saveToLocalStorage() {
     localStorage.setItem('cardsTaches', JSON.stringify(cards));
     localStorage.setItem('histoqueIdCards', histoqueIdCards);
 }
 
-function porterVariables() {
+/** function importerVariables()
+ *
+ * Fonction qui importe respectivement les valeurs cardsTaches et histoqueIdCards
+ * enregistrées dans lelocalStorage vers les variables cards et histoqueIdCards respectives.
+ *
+ */
+function importerVariables() {
     cards = JSON.parse(localStorage.getItem('cardsTaches'));
     histoqueIdCards = +localStorage.getItem('histoqueIdCards');
 }
 
+/** function isNone(id)
+ *
+ * Fonction qui reçoit un ID et échange de la propriété display entre
+ * none et block de l'élément HTML identifié avec l'ID reçu.
+ *
+ */
 function isNone(id) {
     let element = document.getElementById(id);
     if (element.style.display === 'none') {
@@ -35,51 +59,32 @@ function isNone(id) {
     }
 }
 
-
-// {
-//     id: "1",
-//         titre: "titre id01",
-//     contenu: "contenu id01",
-//     type: "urgence_moyenne"
-// },
-// {
-//     id: "2",
-//         titre: "titre id02",
-//     contenu: "contenu id02",
-//     type: "urgence_moyenne"
-// },
-// {
-//     id: "3",
-//         titre: "titre id03",
-//     contenu: "contenu id03",
- //     type: "urgence_moyenne"
-// },
-// {
-//     id: "4",
-//     titre: "titre id04",
-//     contenu: "contenu id04",
-//     type: "urgence_moyenne"
-// }
-
-/**
+/** function addCard()
+ *
+ * Fonction qui ajoute un modèle de carte à la tableau, implémente histoqueIdCards
+ * et recharge les cartes sur l'écran.
  *
  */
 function addCard() {
     cards.push(
         {
-            "id": "card0" + histoqueIdCards,
-            "titre": "titre",
-            "contenu": ["contenu"],
+            "id": "card" + histoqueIdCards,
+            "titre": "Cliquez ici pour éditer le titre",
+            "contenu": ["Cliquez ici pour éditer le contenu"],
             "type": "urgence_basse"
         }
     );
     histoqueIdCards++;
     saveToLocalStorage();
-    montrerCardAdd();
-    log();
+    chargerCards();
 }
 
-
+/** function effacerCard(id)
+ *
+ * Fonction qui reçoit un ID, supprime l'élément HTML avec le même
+ * ID, supprime de la tableau l'élément avec cet identifiant et recharge l'écran
+ *
+ */
 function effacerCard(id) {
     let card = document.getElementById(id);
     card.remove();
@@ -88,9 +93,12 @@ function effacerCard(id) {
             cards.splice(i, 1);
         }
     saveToLocalStorage();
-    log();
 }
-
+/** function changerUrgence(id)
+ *
+ * Fonction qui reçoit un ID et change les classes de l'élément HTML avec cet identifiant.
+ *
+ */
 function changerUrgence(id) {
     let card = document.getElementById(id);
     if (card.className === 'card urgence_basse') {
@@ -104,10 +112,14 @@ function changerUrgence(id) {
         document.getElementById(id).className = 'card urgence_basse';
         changerType(id, 'urgence_basse');
     }
-
-
 }
 
+/** function changerType(id, type)
+ *
+ * Fonction qui reçoit un ID et un type pour changer le type de la carte dans le tableau qui
+ * a le même ID.
+ *
+ */
 function changerType(id, type) {
     for (let i = 0; i < cards.length; i++)
         if (cards[i].id === id) {
@@ -116,39 +128,38 @@ function changerType(id, type) {
     saveToLocalStorage();
 }
 
+/** function updateArrayCards(id)
+ *
+ * Fonction qui reçoit un identifiant, récupère les données des balises "h2" et "li"
+ * et enregistrées h2 comme title et li comme contenu dans la tableau où la carte a le même ID.
+ *
+ */
 function updateArrayCards(id) {
-
-    var list = document.getElementById(id).childNodes;
-    var theArray = [];
-    for(var i=0;i < list.length; i++) {
-        var arrValue = list[i].innerHTML;
-        alert(arrValue);
-        theArray.push(arrValue);
+    let card = document.getElementById(id);
+    let titre = card.getElementsByTagName('h2');
+    let contenu = card.getElementsByTagName('li');
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].id === id) {
+            cards[i].titre = titre[0].innerText;
+            cards[i].contenu = [];
+            for (let j = 0; j < contenu.length; j++) {
+                cards[i].contenu.push(contenu[j].innerText);
+            }
+        }
     }
-
-    // let card = document.getElementById(id);
-    // let titre = card.getElementsByTagName('h2').childNodes[0];
-    // let contenu = card.getElementsByTagName('li').childNodes;
-    // console.log(titre);
-    // console.log(contenu);
-    // for (let i = 0; i < cards.length; i++) {
-    //     if (cards[i].id === id) {
-    //         cards[i].titre = titre;
-    //         cards[i].contenu = [];
-    //         for (let j = 0; j < contenu.length; j++) {
-    //             cards[i].contenu.push(contenu[j].innerHTML);
-    //         }
-    //     }
-    // }
-
-
     saveToLocalStorage();
 }
 
+/** function chargerCards()
+ *
+ * Fonction qui crée des éléments HTML pour représenter chaque cartes enregistrées dans le
+ * tableau et chargée l'écran.
+ *
+ */
 function chargerCards() {
     let container = document.getElementById('containerCards');
+    container.innerHTML = '';
     for (let i = 0; i < cards.length; i++) {
-        log();
         let divCard = document.createElement('div');
         let titre = document.createElement('h2');
         let divTools = document.createElement('div');
@@ -166,6 +177,7 @@ function chargerCards() {
         buttonDelete.className = 'delete float_right fas fa-trash-alt';
         buttonDelete.setAttribute('onclick', 'effacerCard(\'' + cards[i].id + '\')');
         titre.setAttribute('contenteditable', 'true');
+        titre.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[i].id + '\')');
         list.setAttribute('contenteditable', 'true');
         list.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[i].id + '\')');
         divTools.className = 'tools_cards';
@@ -181,69 +193,11 @@ function chargerCards() {
         container.appendChild(divCard);
     }
 }
-
-// <div class="card urgence_moyenne">
-//     <h2>Test</h2>
-//         <p>
-//         </P
-//      <div class="tools_cards">
-//          <button class="edit float_left"></button>
-//          <button class="delete float_right"></button>
-//     </div>
-// </div>
-
-function montrerCardAdd() {
-    let container = document.getElementById('containerCards');
-    let index = 2;
-    log();
-    if (cards.length === 0) {
-        index = 0;
-    } else {
-        index = cards.length - 1;
-    }
-    console.log('Index : ' + index);
-    let divCard = document.createElement('div');
-    let titre = document.createElement('h2');
-    let divTools = document.createElement('div');
-    let buttonEdit = document.createElement('button');
-    let buttonDelete = document.createElement('button');
-    let list = document.createElement('ul');
-    for (let j = 0; j < cards[index].contenu.length; j++) {
-        let li = document.createElement('li');
-        let textLi = document.createTextNode(cards[index].contenu[j]);
-        li.appendChild(textLi);
-        list.appendChild(li);
-    }
-    buttonEdit.className = 'edit float_left fas fa-palette';
-    buttonEdit.setAttribute('onclick', 'changerUrgence(\'' + cards[index].id + '\')');
-    buttonDelete.className = 'delete float_right fas fa-trash-alt';
-    buttonDelete.setAttribute('onclick', 'effacerCard(\'' + cards[index].id + '\')');
-    titre.setAttribute('contenteditable', 'true');
-    titre.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[index].id + '\')');
-    list.setAttribute('contenteditable', 'true');
-    list.setAttribute('onfocusout', 'updateArrayCards(\'' + cards[index].id + '\')');
-    divTools.className = 'tools_cards';
-    divCard.className = 'card ' + cards[index].type;
-    divCard.id = cards[index].id;
-    let ramplirTitle = document.createTextNode(cards[index].titre);
-    titre.appendChild(ramplirTitle);
-    divTools.appendChild(buttonDelete);
-    divTools.appendChild(buttonEdit);
-    divCard.appendChild(titre);
-    divCard.appendChild(list);
-    divCard.appendChild(divTools);
-    container.appendChild(divCard);
-}
-
-function log() {
-
-    console.log('Log : ');
-    console.log('\nCards = ' + cards);
-    console.log('\nCards length = ' + cards.length);
-    console.log('\nHistoqueIdCards = ' + histoqueIdCards);
-}
-
-
+/** function starON()
+ *
+ * Fonction qui est réalisée en début de chargement de la page.
+ *
+ */
 function starON() {
     localStorageSave();
     chargerCards();
